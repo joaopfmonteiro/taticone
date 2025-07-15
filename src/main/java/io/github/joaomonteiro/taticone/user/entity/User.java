@@ -20,7 +20,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = false)
+    @Column(nullable = false, unique = true)
     @NotBlank(message = "Username is required")
     @Size(min = 3, message = "Username must be ate least 3 characters")
     private String username;
@@ -34,7 +34,7 @@ public class User {
     )
     private String password;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     @Email
     @NotBlank(message = "Email is required")
     private String email;

@@ -5,6 +5,7 @@ import io.github.joaomonteiro.taticone.auth.dto.RegisterResponse;
 import io.github.joaomonteiro.taticone.user.entity.User;
 import io.github.joaomonteiro.taticone.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -35,4 +36,9 @@ public class UserService {
                 saved.getRole()
         );
     }
+    public User loadUserByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    }
+
 }
