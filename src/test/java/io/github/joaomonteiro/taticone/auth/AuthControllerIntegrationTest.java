@@ -39,7 +39,7 @@ public class AuthControllerIntegrationTest {
     @DisplayName("POST /api/auth/register - should register successfully and returns 201")
     void shouldRegisterSuccessfully() throws Exception {
         RegisterRequest request = new RegisterRequest(
-                "Joao", "Password123!", "joao@email.com", Role.PLAYER
+                "Joao", "Password123!", "joao@email.com", Role.COACH
         );
 
         mockMvc.perform(post("/api/auth/register")
@@ -48,14 +48,14 @@ public class AuthControllerIntegrationTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.username").value("Joao"))
                 .andExpect(jsonPath("$.email").value("joao@email.com"))
-                .andExpect(jsonPath("$.role").value("PLAYER"));
+                .andExpect(jsonPath("$.role").value("COACH"));
     }
 
     @Test
     @DisplayName("should not register if user name is blank")
     void shouldNotRegisterIfUserNameIsBlank() throws Exception {
         RegisterRequest request = new RegisterRequest(
-                "", "Password123!", "joao@email.com", Role.PLAYER
+                "", "Password123!", "joao@email.com", Role.COACH
         );
 
         mockMvc.perform(post("/api/auth/register")
@@ -69,7 +69,7 @@ public class AuthControllerIntegrationTest {
     @DisplayName("should not register if username have lest then 3 characters")
     void shouldNotRegisterIfUserNameHaveLestThen3Characters() throws Exception {
         RegisterRequest request = new RegisterRequest(
-                "jo", "Password123!", "joao@email.com", Role.PLAYER
+                "jo", "Password123!", "joao@email.com", Role.COACH
         );
 
         mockMvc.perform(post("/api/auth/register")
@@ -81,15 +81,37 @@ public class AuthControllerIntegrationTest {
     @Test
     @DisplayName("POST /api/auth/login - returns 200 after registration")
     void shouldLoginSuccessfullyAfterRegistration() throws Exception {
-        registerUser("Marta", "Password123!", "marta@email.com", Role.PLAYER);
+        RegisterRequest registerRequest = new RegisterRequest(
+                "joo", "Password123!", "joao@email.com", Role.COACH
+        );
 
-        LoginRequest loginRequest = new LoginRequest("Marta", "Password123!");
+        mockMvc.perform(post("/api/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(registerRequest)))
+                .andExpect(status().isCreated());
+
+        LoginRequest loginRequest = new LoginRequest("joo", "Password123!");
 
         mockMvc.perform(post("/api/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(loginRequest)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.token").exists());
+    }
+
+    @Test
+    @DisplayName("POST player can not register by herself")
+    void playerShouldNotBeCreatedByAPlayer() throws Exception{
+        RegisterRequest request = new RegisterRequest(
+                "joo", "Password123!", "joao@email.com", Role.PLAYER
+        );
+
+        mockMvc.perform(post("/api/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("Only COACH role is allowed for self-registration")));
+
     }
 
 }

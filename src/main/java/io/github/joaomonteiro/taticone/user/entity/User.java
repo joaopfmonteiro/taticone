@@ -44,5 +44,8 @@ public class User {
     @NotNull(message = "Role is required")
     private Role role;
 
+    @Column(nullable = false)
+    private boolean enabled = true;
+
 
 }
