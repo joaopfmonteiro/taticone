@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("api/player")
 @RequiredArgsConstructor
@@ -23,5 +25,12 @@ public class PlayerProfileController {
     public ResponseEntity<PlayerResponse> create(@RequestBody @Valid CreatePlayerRequest playerDto){
         PlayerResponse playerResponse = playerProfileService.createPlayer(playerDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(playerResponse);
+    }
+
+    @PreAuthorize("hasRole('COACH')")
+    @GetMapping
+    public ResponseEntity<List<PlayerResponse>> getPlayers(@RequestParam(defaultValue = "age") String sort, @RequestParam(defaultValue = "asc") String direction){
+        List<PlayerResponse> players = playerProfileService.getPlayersSortBy(sort, direction);
+        return ResponseEntity.ok(players);
     }
 }
