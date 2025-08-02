@@ -28,4 +28,6 @@ public class PlayerProfile {
     @JoinColumn(name = "user_id")
     private User linkedUser;
 
+    @OneToOne(mappedBy = "player", cascade = CascadeType.ALL)
+    private PhysicalData physicalData;
 }
