@@ -31,7 +31,7 @@ public class PlayerServiceTest {
     }
 
     @Test
-    @DisplayName("Deve criar um jogador com sucesso")
+    @DisplayName("Post Should create a player")
     void shouldCreatePlayerSuccessfully() {
 
         CreatePlayerRequest request = new CreatePlayerRequest("David", 22, "Portugal");
