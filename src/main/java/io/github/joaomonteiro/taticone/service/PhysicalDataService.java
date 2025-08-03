@@ -40,6 +40,4 @@ public class PhysicalDataService {
                 saved.getEndurance(),
                 saved.getAgility());
     }
-
-
 }

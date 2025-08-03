@@ -30,4 +30,7 @@ public class PlayerProfile {
 
     @OneToOne(mappedBy = "player", cascade = CascadeType.ALL)
     private PhysicalData physicalData;
+
+    @OneToOne(mappedBy = "player", cascade = CascadeType.ALL)
+    private PsychologicalData psychologicalData;
 }
