@@ -18,8 +18,6 @@ public class PhysicalDataController {
 
     private final PhysicalDataService physicalDataService;
 
-    private final PlayerProfileService playerProfileService;
-
     @PreAuthorize("hasRole('COACH')")
     @PostMapping("/{playerId}")
     public ResponseEntity<PhysicalDataResponse> create(@PathVariable long playerId, @RequestBody @Valid PhysicalDataRequest request){
