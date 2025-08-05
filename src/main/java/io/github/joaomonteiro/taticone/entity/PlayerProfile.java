@@ -36,4 +36,7 @@ public class PlayerProfile {
 
     @OneToOne(mappedBy = "player", cascade = CascadeType.ALL)
     private DefensiveAttributes defensiveAttributes;
+
+    @OneToOne(mappedBy = "player", cascade = CascadeType.ALL)
+    private OffensiveAttributes offensiveAttributes;
 }
