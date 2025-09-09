@@ -23,4 +23,11 @@ public class TeamController {
         TeamResponse teamResponse = teamService.createTeam(clubId, teamRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(teamResponse);
     }
+
+    @PreAuthorize("hasRole('COACH')")
+    @PostMapping("/add-player/{playerId}/{teamId}")
+    public ResponseEntity<TeamResponse> addPlayer(@PathVariable long playerId, @PathVariable long teamId){
+        TeamResponse teamResponse = teamService.addPlayer(playerId,teamId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(teamResponse);
+    }
 }

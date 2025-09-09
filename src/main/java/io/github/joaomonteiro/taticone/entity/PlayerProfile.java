@@ -45,4 +45,5 @@ public class PlayerProfile {
     @ManyToOne
     @JoinColumn(name = "team_id")
     private Team team;
+
 }
