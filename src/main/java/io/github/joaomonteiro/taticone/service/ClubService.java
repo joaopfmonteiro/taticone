@@ -19,6 +19,6 @@ public class ClubService {
         club.setName(clubRequest.name());
         Club saved = clubRepository.save(club);
 
-        return new ClubResponse(saved.getName());
+        return new ClubResponse(saved.getId(), saved.getName());
     }
 }

@@ -41,4 +41,8 @@ public class PlayerProfile {
 
     @OneToOne(mappedBy = "player", cascade = CascadeType.ALL)
     private OffensiveAttributes offensiveAttributes;
+
+    @ManyToOne
+    @JoinColumn(name = "team_id")
+    private Team team;
 }
