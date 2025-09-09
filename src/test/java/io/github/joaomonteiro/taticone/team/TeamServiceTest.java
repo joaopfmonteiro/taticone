@@ -1,10 +1,11 @@
 package io.github.joaomonteiro.taticone.team;
 
 import io.github.joaomonteiro.taticone.dto.team.TeamRequest;
-import io.github.joaomonteiro.taticone.dto.team.TeamResponse;
 import io.github.joaomonteiro.taticone.entity.Club;
+import io.github.joaomonteiro.taticone.entity.PlayerProfile;
 import io.github.joaomonteiro.taticone.entity.Team;
 import io.github.joaomonteiro.taticone.repository.ClubRepository;
+import io.github.joaomonteiro.taticone.repository.PlayerRepository;
 import io.github.joaomonteiro.taticone.repository.TeamRepository;
 import io.github.joaomonteiro.taticone.service.TeamService;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,13 +24,15 @@ public class TeamServiceTest {
 
     private TeamRepository teamRepository;
     private ClubRepository clubRepository;
+    private PlayerRepository playerRepository;
     private TeamService teamService;
 
     @BeforeEach
     void setUp(){
         teamRepository = mock(TeamRepository.class);
         clubRepository = mock(ClubRepository.class);
-        teamService = new TeamService(teamRepository, clubRepository);
+        playerRepository = mock(PlayerRepository.class);
+        teamService = new TeamService(teamRepository, clubRepository, playerRepository);
     }
 
     @Test
@@ -54,5 +57,26 @@ public class TeamServiceTest {
         assertEquals("sub 9", response.category());
     }
 
+    @Test
+    @DisplayName("Should add a player to a team")
+    void shouldAddPlayer(){
+        var teamId = 1L;
+        var team = new Team();
+        team.setId(teamId);
+
+        var playerId = 1L;
+        var player = new PlayerProfile();
+        player.setId(playerId);
+
+        team.setPlayerProfile(List.of(player));
+
+        when(playerRepository.findById(playerId)).thenReturn(Optional.of(player));
+        when(teamRepository.findById(teamId)).thenReturn(Optional.of(team));
+
+        teamService.addPlayer(playerId, teamId);
+
+        assertEquals(1, team.getPlayerProfile().size());
+
+    }
 
 }
