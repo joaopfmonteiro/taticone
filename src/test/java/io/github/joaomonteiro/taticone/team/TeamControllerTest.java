@@ -1,6 +1,9 @@
 package io.github.joaomonteiro.taticone.team;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.joaomonteiro.taticone.dto.club.ClubRequest;
+import io.github.joaomonteiro.taticone.dto.player.CreatePlayerRequest;
+import io.github.joaomonteiro.taticone.dto.player.DefensiveAttributesRequest;
 import io.github.joaomonteiro.taticone.dto.team.TeamRequest;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
@@ -28,14 +31,27 @@ public class TeamControllerTest {
     @Test
     @Transactional
     @WithMockUser(username = "coach1",roles = {"COACH"})
-    @DisplayName("Post /api/team should create a team")
+    @DisplayName("Post /api/team should create a team and add to a Club")
     void shouldCreateATeam() throws Exception{
 
-        var request = new TeamRequest("sub 19");
-        var response = mockMvc.perform(post("/api/team")
-                .contentType("application/json")
-                .content(objectMapper.writeValueAsString(request)))
+        var request = new ClubRequest("Bir");
+        var clubResponse =  mockMvc.perform(post("/api/club")
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.category").value("sub 19"));
+                .andReturn();
+
+        var content = clubResponse.getResponse().getContentAsString();
+        var createdId = objectMapper.readTree(content).get("id").asLong();
+
+        var dataRequest = new TeamRequest(
+               "Sub 19"
+        );
+
+        mockMvc.perform(post("/api/team/" + createdId)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(dataRequest)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.category").value("Sub 19"));
     }
 }
