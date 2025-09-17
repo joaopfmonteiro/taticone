@@ -1,6 +1,7 @@
 package io.github.joaomonteiro.taticone.auth.dto;
 
 import io.github.joaomonteiro.taticone.user.entity.Role;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.*;
 
 public record RegisterRequest (
@@ -8,6 +9,12 @@ public record RegisterRequest (
     @NotBlank(message = "Username is required")
     @Size(min = 3, message = "Username must be ate least 3 characters")
     String username,
+
+    @NotBlank(message = "First name is required")
+    String firstName,
+
+    @NotBlank(message = "Last name is required")
+    String lastName,
 
     @NotBlank(message = "Password is required")
     @Size(min = 8, message = "The password must be at least 8 characters")

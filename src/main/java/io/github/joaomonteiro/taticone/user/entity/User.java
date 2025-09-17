@@ -25,6 +25,14 @@ public class User {
     @Size(min = 3, message = "Username must be ate least 3 characters")
     private String username;
 
+    @Column(nullable = false, unique = true)
+    @NotBlank(message = "First name is required")
+    private String firstName;
+
+    @Column(nullable = false, unique = true)
+    @NotBlank(message = "Last name is required")
+    private String lastName;
+
     @Column(nullable = false)
     @NotBlank(message = "Password is required")
     @Size(min = 8, message = "The password must be at least 8 characters")
