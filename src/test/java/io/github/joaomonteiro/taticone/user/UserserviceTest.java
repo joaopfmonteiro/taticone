@@ -32,7 +32,7 @@ public class UserserviceTest {
     @DisplayName("should register a new User successfully")
     public void shouldRegisterNewUserSuccessfully(){
         RegisterRequest request = new RegisterRequest(
-                "Joao", "Password123", "joao@email.com", Role.PLAYER);
+                "Joao", "Joao","Monteiro","Password123", "joao@email.com", Role.PLAYER);
 
         when(userRepository.existsByUsername("Joao")).thenReturn(false);
 
@@ -42,6 +42,8 @@ public class UserserviceTest {
         RegisterResponse response = userService.register(request);
 
         assertEquals("Joao", response.username());
+        assertEquals("Joao", response.firstName());
+        assertEquals("Monteiro", response.lastname());
         assertEquals("joao@email.com", response.email());
         assertEquals(Role.PLAYER, response.role());
 
@@ -51,7 +53,7 @@ public class UserserviceTest {
     @DisplayName("should throw exception when username exists")
     void shouldThrowExceptionWhenUsernameExists(){
         RegisterRequest request = new RegisterRequest(
-                "Joao", "Password123", "joao@email.com", Role.PLAYER);
+                "Joao", "Joao","Monteiro","Password123", "joao@email.com", Role.PLAYER);
 
         when(userRepository.existsByUsername("Joao")).thenReturn(true);
 
@@ -64,7 +66,7 @@ public class UserserviceTest {
     @DisplayName("should encrypt password")
     void  shouldEncryptPassword() {
         RegisterRequest request = new RegisterRequest(
-                "Joao", "Password123", "joao@email.com", Role.PLAYER);
+                "Joao", "Joao","Monteiro","Password123", "joao@email.com", Role.PLAYER);
         when(userRepository.save(any(User.class)))
                 .thenAnswer(invocation -> {
                     User user = invocation.getArgument(0);

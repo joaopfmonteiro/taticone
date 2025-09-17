@@ -50,16 +50,14 @@ public class AuthControllerTest {
     @Test
     @DisplayName("should register successfully")
     void shouldRegisterSuccessfully() {
-        // Arrange
-        RegisterRequest request = new RegisterRequest("Joao", "Password123!", "joao@email.com", Role.PLAYER);
-        RegisterResponse response = new RegisterResponse("Joao", "joao@email.com", Role.PLAYER);
+
+        RegisterRequest request = new RegisterRequest("Joao", "Joao","Monteiro","Password123!", "joao@email.com", Role.PLAYER);
+        RegisterResponse response = new RegisterResponse("Joao", "Joao","Monteiro","joao@email.com", Role.PLAYER);
 
         when(authService.register(any(RegisterRequest.class))).thenReturn(response);
 
-        // Act
         ResponseEntity<RegisterResponse> result = authController.register(request);
 
-        // Assert
         assertEquals(HttpStatus.CREATED, result.getStatusCode());
         assertNotNull(result.getBody());
         assertEquals("Joao", result.getBody().username());

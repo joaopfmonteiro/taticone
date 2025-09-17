@@ -26,8 +26,8 @@ public class AuthControllerIntegrationTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private void registerUser(String username, String password, String email, Role role) throws Exception {
-        RegisterRequest request = new RegisterRequest(username, password, email, role);
+    private void registerUser(String username, String firstName, String lastName,String password, String email, Role role) throws Exception {
+        RegisterRequest request = new RegisterRequest(username, firstName, lastName,password, email, role);
 
         mockMvc.perform(post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -39,7 +39,7 @@ public class AuthControllerIntegrationTest {
     @DisplayName("POST /api/auth/register - should register successfully and returns 201")
     void shouldRegisterSuccessfully() throws Exception {
         RegisterRequest request = new RegisterRequest(
-                "Joao", "Password123!", "joao@email.com", Role.COACH
+                "Joao","Joao","Monteiro", "Password123!", "joao@email.com", Role.COACH
         );
 
         mockMvc.perform(post("/api/auth/register")
@@ -47,6 +47,8 @@ public class AuthControllerIntegrationTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.username").value("Joao"))
+                .andExpect(jsonPath("$.firstName").value("Joao"))
+                .andExpect(jsonPath("$.lastName").value("Monteiro"))
                 .andExpect(jsonPath("$.email").value("joao@email.com"))
                 .andExpect(jsonPath("$.role").value("COACH"));
     }
@@ -55,7 +57,7 @@ public class AuthControllerIntegrationTest {
     @DisplayName("should not register if user name is blank")
     void shouldNotRegisterIfUserNameIsBlank() throws Exception {
         RegisterRequest request = new RegisterRequest(
-                "", "Password123!", "joao@email.com", Role.COACH
+                "", "Joao","Monteiro","Password123!", "joao@email.com", Role.COACH
         );
 
         mockMvc.perform(post("/api/auth/register")
@@ -69,7 +71,7 @@ public class AuthControllerIntegrationTest {
     @DisplayName("should not register if username have lest then 3 characters")
     void shouldNotRegisterIfUserNameHaveLestThen3Characters() throws Exception {
         RegisterRequest request = new RegisterRequest(
-                "jo", "Password123!", "joao@email.com", Role.COACH
+                "jo", "Joao","Monteiro","Password123!", "joao@email.com", Role.COACH
         );
 
         mockMvc.perform(post("/api/auth/register")
@@ -82,7 +84,7 @@ public class AuthControllerIntegrationTest {
     @DisplayName("POST /api/auth/login - returns 200 after registration")
     void shouldLoginSuccessfullyAfterRegistration() throws Exception {
         RegisterRequest registerRequest = new RegisterRequest(
-                "joo", "Password123!", "joao@email.com", Role.COACH
+                "joo", "Joao","Monteiro","Password123!", "joao@email.com", Role.COACH
         );
 
         mockMvc.perform(post("/api/auth/register")
@@ -103,7 +105,7 @@ public class AuthControllerIntegrationTest {
     @DisplayName("POST player can not register by herself")
     void playerShouldNotBeCreatedByAPlayer() throws Exception{
         RegisterRequest request = new RegisterRequest(
-                "joo", "Password123!", "joao@email.com", Role.PLAYER
+                "joo", "Joao","Monteiro","Password123!", "joao@email.com", Role.PLAYER
         );
 
         mockMvc.perform(post("/api/auth/register")

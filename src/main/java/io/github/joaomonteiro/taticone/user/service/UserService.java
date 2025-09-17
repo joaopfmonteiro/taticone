@@ -24,6 +24,8 @@ public class UserService {
         User user = User.builder()
                 .username(request.username())
                 .email(request.email())
+                .firstName(request.firstName())
+                .lastName(request.lastName())
                 .password(passwordEncoder.encode(request.password()))
                 .role(request.role())
                 .build();
@@ -32,6 +34,8 @@ public class UserService {
 
         return new RegisterResponse(
                 saved.getUsername(),
+                saved.getFirstName(),
+                saved.getLastName(),
                 saved.getEmail(),
                 saved.getRole()
         );
